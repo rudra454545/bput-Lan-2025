@@ -1,96 +1,205 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* BPUT Free Fire LAN Event Design System - Dark Greenish Gaming Theme with Glassmorphism */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Dark Greenish Base Colors */
+    --background: 160 40% 6%;
+    --background-secondary: 160 30% 10%;
+    --background-tertiary: 160 25% 16%;
+    --foreground: 0 0% 100%;
+    
+    /* Neon Accent Colors */
+    --neon-green: 152 100% 50%;
+    --neon-cyan: 190 100% 50%;
+    --neon-lime: 82 100% 50%;
+    
+    /* Card & Surface Colors */
+    --card: 160 25% 16%;
+    --card-foreground: 0 0% 100%;
+    
+    --popover: 160 30% 10%;
+    --popover-foreground: 0 0% 100%;
+    
+    /* Primary - Bright Green */
+    --primary: 152 100% 50%;
+    --primary-foreground: 160 40% 6%;
+    
+    /* Secondary - Cyan */
+    --secondary: 190 100% 50%;
+    --secondary-foreground: 160 40% 6%;
+    
+    /* Muted Colors */
+    --muted: 160 20% 25%;
+    --muted-foreground: 160 15% 65%;
+    
+    /* Accent - Lime */
+    --accent: 82 100% 50%;
+    --accent-foreground: 160 40% 6%;
+    
+    /* Semantic Colors */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --success: 152 100% 50%;
+    --success-foreground: 160 40% 6%;
+    
+    --warning: 45 100% 50%;
+    --warning-foreground: 160 40% 6%;
+    
+    --info: 190 100% 50%;
+    --info-foreground: 160 40% 6%;
+    
+    /* Border & Input */
+    --border: 160 20% 25%;
+    --input: 160 20% 25%;
+    --ring: 152 100% 50%;
+    
+    /* Glass Effect Variables */
+    --glass-bg: 160 25% 16%;
+    --glass-border: 0 0% 100%;
+    --glass-shadow: 0 0% 0%;
+    
+    /* Shadows & Glows */
+    --shadow-primary: 152 100% 50%;
+    --shadow-secondary: 190 100% 50%;
+    --shadow-accent: 82 100% 50%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(152 100% 50%) 0%, hsl(190 100% 50%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(190 100% 50%) 0%, hsl(82 100% 50%) 100%);
+    --gradient-radial: radial-gradient(circle at 20% 50%, hsla(152 100% 50% / 0.05) 0%, transparent 50%), 
+                       radial-gradient(circle at 80% 80%, hsla(190 100% 50% / 0.05) 0%, transparent 50%);
+    
+    --radius: 16px;
+    
+    /* Animation Timings */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   }
+}
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Rajdhani', sans-serif;
+    background: linear-gradient(135deg, hsl(160 40% 6%) 0%, hsl(160 30% 10%) 50%, hsl(160 25% 16%) 100%);
+    background-attachment: fixed;
+    position: relative;
+  }
+  
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(circle at 20% 50%, hsla(152 100% 50% / 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, hsla(190 100% 50% / 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 50% 20%, hsla(82 100% 50% / 0.03) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+  }
+}
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+@layer components {
+  /* Glassmorphism Base */
+  .glass {
+    background: hsla(var(--glass-bg) / 0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid hsla(var(--glass-border) / 0.1);
+    box-shadow: 0 8px 32px 0 hsla(var(--glass-shadow) / 0.37);
+  }
+  
+  .glass-sm {
+    background: hsla(var(--glass-bg) / 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid hsla(var(--glass-border) / 0.08);
+    box-shadow: 0 4px 16px 0 hsla(var(--glass-shadow) / 0.25);
+  }
+  
+  .glass-lg {
+    background: hsla(var(--glass-bg) / 0.2);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 1px solid hsla(var(--glass-border) / 0.12);
+    box-shadow: 0 12px 48px 0 hsla(var(--glass-shadow) / 0.45);
+  }
+  
+  /* Gradient Text */
+  .gradient-text {
+    background: linear-gradient(135deg, hsl(152 100% 50%) 0%, hsl(190 100% 50%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .gradient-text-accent {
+    background: linear-gradient(135deg, hsl(190 100% 50%) 0%, hsl(82 100% 50%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Glow Effects */
+  .glow-primary {
+    box-shadow: 0 0 20px hsla(var(--shadow-primary) / 0.4),
+                0 0 40px hsla(var(--shadow-primary) / 0.2);
+  }
+  
+  .glow-secondary {
+    box-shadow: 0 0 20px hsla(var(--shadow-secondary) / 0.4),
+                0 0 40px hsla(var(--shadow-secondary) / 0.2);
+  }
+  
+  .glow-accent {
+    box-shadow: 0 0 20px hsla(var(--shadow-accent) / 0.4),
+                0 0 40px hsla(var(--shadow-accent) / 0.2);
+  }
+  
+  /* Hover Glow */
+  .hover-glow-primary {
+    transition: var(--transition-smooth);
+  }
+  
+  .hover-glow-primary:hover {
+    box-shadow: 0 0 30px hsla(var(--shadow-primary) / 0.6),
+                0 0 60px hsla(var(--shadow-primary) / 0.3);
+    transform: translateY(-2px);
+  }
+  
+  .hover-glow-secondary:hover {
+    box-shadow: 0 0 30px hsla(var(--shadow-secondary) / 0.6),
+                0 0 60px hsla(var(--shadow-secondary) / 0.3);
+    transform: translateY(-2px);
+  }
+  
+  /* 3D Card Effect */
+  .card-3d {
+    transform-style: preserve-3d;
+    transition: var(--transition-smooth);
+  }
+  
+  .card-3d:hover {
+    transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) translateY(-8px);
   }
 }
 
