@@ -1,15 +1,39 @@
-import { Link } from "react-router-dom";
-import { Menu, X, Trophy, Calendar, Users, UserPlus } from "lucide-react";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Menu, X, Trophy, Calendar, Users, UserPlus, User, LogOut, Shield } from "lucide-react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check auth state
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user || null);
+      setIsAdmin(session?.user?.email === "tech.obscuragroups@gmail.com");
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
+      setUser(session?.user || null);
+      setIsAdmin(session?.user?.email === "tech.obscuragroups@gmail.com");
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate("/");
+  };
 
   const navLinks = [
     { name: "Home", path: "/", icon: Trophy },
     { name: "Schedule", path: "/schedule", icon: Calendar },
-    { name: "Points", path: "/points", icon: Trophy },
+    { name: "Points", path: "/points", icon: Users },
     { name: "Register", path: "/register", icon: UserPlus },
   ];
 
@@ -39,6 +63,36 @@ const Navigation = () => {
                 </Button>
               </Link>
             ))}
+            
+            {user ? (
+              <>
+                <Link to="/profile">
+                  <Button variant="ghost" className="gap-2 hover:text-primary transition-colors">
+                    <User className="w-4 h-4" />
+                    Profile
+                  </Button>
+                </Link>
+                {isAdmin && (
+                  <Link to="/admin">
+                    <Button variant="ghost" className="gap-2 hover:text-primary transition-colors">
+                      <Shield className="w-4 h-4" />
+                      Admin
+                    </Button>
+                  </Link>
+                )}
+                <Button variant="ghost" onClick={handleLogout} className="gap-2 hover:text-destructive transition-colors">
+                  <LogOut className="w-4 h-4" />
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <Link to="/auth">
+                <Button variant="hero" size="sm">
+                  <User className="w-4 h-4" />
+                  Login / Signup
+                </Button>
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}

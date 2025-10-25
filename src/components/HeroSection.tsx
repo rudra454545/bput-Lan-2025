@@ -12,10 +12,9 @@ const HeroSection = () => {
     seconds: 0,
   });
 
-  // Countdown to event (example: 30 days from now)
+  // Countdown to BR tournament (Nov 8, 2025)
   useEffect(() => {
-    const eventDate = new Date();
-    eventDate.setDate(eventDate.getDate() + 30);
+    const eventDate = new Date("2025-11-08T10:00:00");
 
     const timer = setInterval(() => {
       const now = new Date().getTime();
