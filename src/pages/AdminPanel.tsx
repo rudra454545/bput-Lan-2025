@@ -69,11 +69,11 @@ const AdminPanel = () => {
     setLoading(false);
   };
 
-  const handleApproveTeam = async (teamId: string) => {
+  const handleApproveTeam = async (team: any) => {
     const { error } = await supabase
       .from("teams")
       .update({ is_verified: true })
-      .eq("team_id", teamId);
+      .eq("team_id", team.team_id);
 
     if (error) {
       toast({
@@ -89,15 +89,16 @@ const AdminPanel = () => {
       description: "Team has been verified successfully",
     });
 
-    // Refresh the teams data to move the approved team to verified section
-    fetchTeams();
+    // Update state locally to move the team immediately
+    setPendingTeams(prev => prev.filter(t => t.team_id !== team.team_id));
+    setVerifiedTeams(prev => [...prev, { ...team, is_verified: true }]);
   };
 
-  const handleRejectTeam = async (teamId: string) => {
+  const handleRejectTeam = async (team: any) => {
     const { error } = await supabase
       .from("teams")
       .delete()
-      .eq("team_id", teamId);
+      .eq("team_id", team.team_id);
 
     if (error) {
       toast({
@@ -113,7 +114,8 @@ const AdminPanel = () => {
       description: "Team registration has been rejected",
     });
 
-    fetchTeams();
+    // Update state locally to remove the team immediately
+    setPendingTeams(prev => prev.filter(t => t.team_id !== team.team_id));
   };
 
   if (loading) {
@@ -231,14 +233,14 @@ const AdminPanel = () => {
                         <Button
                           variant="hero"
                           size="sm"
-                          onClick={() => handleApproveTeam(team.team_id)}
+                          onClick={() => handleApproveTeam(team)}
                         >
                           Approve
                         </Button>
                         <Button
                           variant="destructive"
                           size="sm"
-                          onClick={() => handleRejectTeam(team.team_id)}
+                          onClick={() => handleRejectTeam(team)}
                         >
                           Reject
                         </Button>
