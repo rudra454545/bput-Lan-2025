@@ -102,12 +102,7 @@ const Footer = () => {
                     bputfflan@gmail.com
                   </a>
                 </li>
-                <li className="flex items-center gap-3 text-muted-foreground">
-                  <Phone className="w-5 h-5 text-primary shrink-0" />
-                  <a href="tel:+919876543210" className="hover:text-primary transition-colors">
-                    +91 98765 43210
-                  </a>
-                </li>
+                
                 <li className="flex items-center gap-3 text-muted-foreground">
                   <Phone className="w-5 h-5 text-primary shrink-0" />
                   <a href="tel:+917853851009" className="hover:text-primary transition-colors">

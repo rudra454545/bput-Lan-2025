@@ -30,16 +30,16 @@
     --primary: 0 0% 98%;
     --primary-foreground: 0 0% 4%;
     
-    /* Secondary - Grey */
-    --secondary: 0 0% 35%;
+    /* Secondary - Dark Glossy Black */
+    --secondary: 0 0% 8%;
     --secondary-foreground: 0 0% 98%;
-    
-    /* Muted Colors */
-    --muted: 0 0% 18%;
-    --muted-foreground: 0 0% 60%;
-    
-    /* Accent - Light Grey */
-    --accent: 0 0% 45%;
+
+    /* Muted Colors - Dark Glossy Black */
+    --muted: 0 0% 6%;
+    --muted-foreground: 0 0% 70%;
+
+    /* Accent - Dark Glossy Black */
+    --accent: 0 0% 12%;
     --accent-foreground: 0 0% 98%;
     
     /* Semantic Colors */
@@ -92,11 +92,11 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Rajdhani', sans-serif;
-    background: radial-gradient(ellipse at top, hsl(0 0% 8%) 0%, hsl(0 0% 4%) 100%);
+    background: hsl(0 0% 0%);
     background-attachment: fixed;
     position: relative;
   }
-  
+
   body::before {
     content: '';
     position: fixed;
@@ -104,9 +104,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: 
-      radial-gradient(circle at 20% 50%, hsla(0 0% 98% / 0.02) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, hsla(0 0% 70% / 0.02) 0%, transparent 50%);
+    background: linear-gradient(135deg, hsla(0 0% 5% / 0.3) 0%, hsla(0 0% 0% / 0.8) 50%, hsla(0 0% 5% / 0.3) 100%);
     pointer-events: none;
     z-index: 0;
   }
