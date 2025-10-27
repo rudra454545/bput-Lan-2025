@@ -35,7 +35,7 @@ const Navigation = () => {
     { name: "Schedule", path: "/schedule", icon: Calendar },
     { name: "Points", path: "/points", icon: Users },
     { name: "Guidelines", path: "/guidelines", icon: Users },
-    { name: "Register", path: "/register", icon: UserPlus },
+    { name: "Register", path: user ? "/register" : "/auth", icon: UserPlus },
     { name: "Developer", path: "/developer", icon: User },
   ];
 

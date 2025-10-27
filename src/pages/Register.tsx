@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -6,13 +6,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { Trophy, Plus, X, MessageCircle } from "lucide-react";
+import { Trophy, Plus, X, MessageCircle, LogIn } from "lucide-react";
 import { motion } from "framer-motion";
 import { BackgroundPaths } from "@/components/BackgroundPaths";
+import { supabase } from "@/integrations/supabase/client";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState<any>(null);
   const [teamName, setTeamName] = useState("");
   const [teamLogo, setTeamLogo] = useState<File | null>(null);
   const [brMode, setBrMode] = useState(false);
@@ -25,6 +29,19 @@ const Register = () => {
   ]);
   const [showFifthPlayer, setShowFifthPlayer] = useState(false);
 
+  // Check auth state
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user || null);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
+      setUser(session?.user || null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   // Registration deadline check
   const registrationDeadline = new Date("2025-11-05T17:00:00");
   const isRegistrationOpen = new Date() < registrationDeadline;
@@ -33,7 +50,17 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please login or sign up first to register your team.",
+        variant: "destructive",
+      });
+      navigate("/auth");
+      return;
+    }
+
     if (!isRegistrationOpen) {
       toast({
         title: "Registration Closed",
@@ -74,7 +101,23 @@ const Register = () => {
           </p>
         </motion.div>
 
-        {!isRegistrationOpen ? (
+        {!user ? (
+          <div className="glass-lg rounded-2xl p-8 text-center">
+            <LogIn className="w-16 h-16 text-primary mx-auto mb-4" />
+            <h2 className="text-2xl font-bold mb-4">Authentication Required</h2>
+            <p className="text-muted-foreground text-lg mb-6">
+              You need to login or sign up first to register your team for the tournament.
+            </p>
+            <div className="flex gap-4 justify-center">
+              <Link to="/auth">
+                <Button variant="hero" size="lg">
+                  <LogIn className="w-5 h-5 mr-2" />
+                  Login / Sign Up
+                </Button>
+              </Link>
+            </div>
+          </div>
+        ) : !isRegistrationOpen ? (
           <div className="glass-lg rounded-2xl p-8 text-center">
             <Trophy className="w-16 h-16 text-destructive mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-4">Registration Closed</h2>
