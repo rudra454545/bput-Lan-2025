@@ -201,9 +201,17 @@ const Register = () => {
 
       if (teamError) {
         console.error("Team creation error:", teamError);
+        let errorMessage = "Failed to create team";
+        if (teamError.code === '23505') { // Unique constraint violation
+          if (teamError.message.includes('team_name')) {
+            errorMessage = "Team name already exists. Please choose a different name.";
+          } else if (teamError.message.includes('unique_team_id')) {
+            errorMessage = "Team ID generation failed. Please try again.";
+          }
+        }
         toast({
           title: "Registration Error",
-          description: "Failed to create team",
+          description: errorMessage,
           variant: "destructive",
         });
         setLoading(false);
