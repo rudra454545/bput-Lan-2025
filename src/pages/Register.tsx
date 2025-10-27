@@ -9,9 +9,12 @@ import { useToast } from "@/hooks/use-toast";
 import { Trophy, Plus, X, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { BackgroundPaths } from "@/components/BackgroundPaths";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [teamName, setTeamName] = useState("");
   const [teamLogo, setTeamLogo] = useState<File | null>(null);
@@ -33,6 +36,7 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
     if (!isRegistrationOpen) {
       toast({
@@ -40,13 +44,250 @@ const Register = () => {
         description: "Registration deadline has passed (Nov 5, 5 PM)",
         variant: "destructive",
       });
+      setLoading(false);
       return;
     }
 
-    toast({
-      title: "Registration Submitted!",
-      description: "Your team registration has been submitted successfully. You will be notified once verified by admin.",
-    });
+    // Validate form data
+    if (!teamName.trim()) {
+      toast({
+        title: "Validation Error",
+        description: "Team name is required",
+        variant: "destructive",
+      });
+      setLoading(false);
+      return;
+    }
+
+    if (!teamLogo) {
+      toast({
+        title: "Validation Error",
+        description: "Team logo is required",
+        variant: "destructive",
+      });
+      setLoading(false);
+      return;
+    }
+
+    if (!brMode && !csMode) {
+      toast({
+        title: "Validation Error",
+        description: "Please select at least one tournament mode",
+        variant: "destructive",
+      });
+      setLoading(false);
+      return;
+    }
+
+    // Check if all players have IDs
+    const validPlayers = players.filter(p => p.playerId.trim());
+    if (validPlayers.length < 4) {
+      toast({
+        title: "Validation Error",
+        description: "At least 4 players are required",
+        variant: "destructive",
+      });
+      setLoading(false);
+      return;
+    }
+
+    // Check if IGL is selected
+    const iglSelected = players.some(p => p.isIGL);
+    if (!iglSelected) {
+      toast({
+        title: "Validation Error",
+        description: "Please select an In-Game Leader (IGL)",
+        variant: "destructive",
+      });
+      setLoading(false);
+      return;
+    }
+
+    try {
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast({
+          title: "Authentication Error",
+          description: "Please log in to register",
+          variant: "destructive",
+        });
+        navigate("/auth");
+        setLoading(false);
+        return;
+      }
+
+      // Find IGL player
+      const iglPlayer = players.find(p => p.isIGL);
+      if (!iglPlayer) {
+        toast({
+          title: "Error",
+          description: "IGL not found",
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
+      // Get IGL profile
+      const { data: iglProfile } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("unique_player_id", iglPlayer.playerId)
+        .single();
+
+      if (!iglProfile) {
+        toast({
+          title: "Error",
+          description: "IGL profile not found. Please ensure the IGL has a valid player ID.",
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
+      // Upload team logo
+      const fileExt = teamLogo.name.split('.').pop();
+      const fileName = `${Date.now()}.${fileExt}`;
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from("team-logos")
+        .upload(fileName, teamLogo);
+
+      if (uploadError) {
+        console.error("Upload error:", uploadError);
+        toast({
+          title: "Upload Error",
+          description: "Failed to upload team logo",
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from("team-logos")
+        .getPublicUrl(fileName);
+
+      // Generate unique team ID
+      const { data: teamIdData, error: teamIdError } = await supabase
+        .rpc("generate_unique_team_id");
+
+      if (teamIdError || !teamIdData) {
+        console.error("Team ID generation error:", teamIdError);
+        toast({
+          title: "Error",
+          description: "Failed to generate team ID",
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
+      // Create team
+      const { data: teamData, error: teamError } = await supabase
+        .from("teams")
+        .insert({
+          team_id: teamIdData,
+          team_name: teamName.trim(),
+          igl_user_id: iglProfile.id,
+          team_logo_url: publicUrl,
+          br_mode: brMode,
+          cs_mode: csMode,
+          is_verified: false,
+          members_count: validPlayers.length,
+          unique_team_id: teamIdData,
+        })
+        .select()
+        .single();
+
+      if (teamError) {
+        console.error("Team creation error:", teamError);
+        toast({
+          title: "Registration Error",
+          description: "Failed to create team",
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
+      // Add team members
+      const teamMembers = validPlayers.map(player => ({
+        team_id: teamData.team_id,
+        user_id: player.playerId, // This should be the profile ID, but we need to get it from unique_player_id
+        roles: player.roles,
+        is_igl: player.isIGL,
+      }));
+
+      // First, get profile IDs for all players
+      const playerIds = validPlayers.map(p => p.playerId);
+      const { data: profiles, error: profilesError } = await supabase
+        .from("profiles")
+        .select("id, unique_player_id")
+        .in("unique_player_id", playerIds);
+
+      if (profilesError || !profiles) {
+        console.error("Profiles fetch error:", profilesError);
+        toast({
+          title: "Error",
+          description: "Failed to fetch player profiles",
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
+      // Map unique_player_id to profile id
+      const profileMap = new Map(profiles.map(p => [p.unique_player_id, p.id]));
+
+      const teamMembersWithIds = teamMembers.map(member => ({
+        ...member,
+        user_id: profileMap.get(member.user_id) || member.user_id,
+      }));
+
+      const { error: membersError } = await supabase
+        .from("team_members")
+        .insert(teamMembersWithIds);
+
+      if (membersError) {
+        console.error("Team members creation error:", membersError);
+        toast({
+          title: "Registration Error",
+          description: "Failed to add team members",
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
+      toast({
+        title: "Registration Submitted!",
+        description: "Your team registration has been submitted successfully. You will be notified once verified by admin.",
+      });
+
+      // Reset form
+      setTeamName("");
+      setTeamLogo(null);
+      setBrMode(false);
+      setCsMode(false);
+      setPlayers([
+        { playerId: "", roles: [], isIGL: false },
+        { playerId: "", roles: [], isIGL: false },
+        { playerId: "", roles: [], isIGL: false },
+        { playerId: "", roles: [], isIGL: false },
+      ]);
+      setShowFifthPlayer(false);
+
+    } catch (error) {
+      console.error("Registration error:", error);
+      toast({
+        title: "Registration Error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
