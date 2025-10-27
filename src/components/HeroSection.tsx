@@ -83,7 +83,7 @@ const HeroSection = () => {
 
           {/* Subtitle */}
           <motion.p variants={itemVariants} className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto">
-            Join the ultimate Free Fire tournament. Compete with the best players, win amazing prizes, and become a legend.
+            A free friendly tournament organized by BPUT FF Committee
           </motion.p>
 
           {/* CTA Buttons */}
