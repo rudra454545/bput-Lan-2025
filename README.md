@@ -1,4 +1,4 @@
-# ServeNow - Modern SaaS Platform
+# BPUT LAN  - Modern SaaS Platform
 
 A full-stack SaaS application built with Next.js 14, TypeScript, Supabase, and modern React ecosystem tools. Ready to scale and serve your customers with cutting-edge technology.
 
