@@ -211,13 +211,6 @@ const Register = () => {
       }
 
       // Add team members
-      const teamMembers = validPlayers.map(player => ({
-        team_id: teamData.team_id,
-        user_id: player.playerId, // This should be the profile ID, but we need to get it from unique_player_id
-        roles: player.roles,
-        is_igl: player.isIGL,
-      }));
-
       // First, get profile IDs for all players
       const playerIds = validPlayers.map(p => p.playerId);
       const { data: profiles, error: profilesError } = await supabase
@@ -239,14 +232,28 @@ const Register = () => {
       // Map unique_player_id to profile id
       const profileMap = new Map(profiles.map(p => [p.unique_player_id, p.id]));
 
-      const teamMembersWithIds = teamMembers.map(member => ({
-        ...member,
-        user_id: profileMap.get(member.user_id) || member.user_id,
+      // Check if all players have valid profiles
+      const missingProfiles = validPlayers.filter(p => !profileMap.has(p.playerId));
+      if (missingProfiles.length > 0) {
+        toast({
+          title: "Error",
+          description: `Player(s) not found: ${missingProfiles.map(p => p.playerId).join(', ')}. Please ensure all players have valid profiles.`,
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
+      const teamMembers = validPlayers.map(player => ({
+        team_id: teamData.team_id,
+        user_id: profileMap.get(player.playerId)!,
+        roles: player.roles,
+        is_igl: player.isIGL,
       }));
 
       const { error: membersError } = await supabase
         .from("team_members")
-        .insert(teamMembersWithIds);
+        .insert(teamMembers);
 
       if (membersError) {
         console.error("Team members creation error:", membersError);
