@@ -46,8 +46,14 @@ const Points = () => {
       .select(`
         *,
         teams:team_id (team_name, unique_team_id, team_logo_url)
-      `)
-      .order("total_points", { ascending: false });
+      `);
+    
+    // Sort by booyah (priority), then position points, then total points
+    const sortedBrData = (brData || []).sort((a, b) => {
+      if (b.booyah !== a.booyah) return b.booyah - a.booyah;
+      if (b.total_standing_points !== a.total_standing_points) return b.total_standing_points - a.total_standing_points;
+      return b.total_points - a.total_points;
+    });
 
     // Fetch CS team standings
     const { data: csData } = await supabase
@@ -80,7 +86,7 @@ const Points = () => {
       .order("kills", { ascending: false })
       .limit(15);
 
-    setBrTeams(brData || []);
+    setBrTeams(sortedBrData);
     setCsTeams(csData || []);
     setBrPlayers(brPlayersData || []);
     setCsPlayers(csPlayersData || []);
@@ -130,7 +136,8 @@ const Points = () => {
                   <tr className="border-b border-border">
                     <th className="text-left p-4">Rank</th>
                     <th className="text-left p-4">Team</th>
-                    <th className="text-center p-4">Total Kills</th>
+                    <th className="text-center p-4">Booyah</th>
+                    <th className="text-center p-4">Kill Points</th>
                     <th className="text-center p-4">Position Points</th>
                     <th className="text-center p-4">Total Points</th>
                   </tr>
@@ -138,13 +145,13 @@ const Points = () => {
                 <tbody>
                   {loading ? (
                     <tr>
-                      <td colSpan={5} className="text-center p-8 text-muted-foreground">
+                      <td colSpan={6} className="text-center p-8 text-muted-foreground">
                         Loading standings...
                       </td>
                     </tr>
                   ) : brTeams.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="text-center p-8 text-muted-foreground">
+                      <td colSpan={6} className="text-center p-8 text-muted-foreground">
                         No match data yet. Standings will appear after first match.
                       </td>
                     </tr>
@@ -169,6 +176,7 @@ const Points = () => {
                             </div>
                           </div>
                         </td>
+                        <td className="text-center p-4 font-black text-yellow-400 text-xl">{team.booyah || 0}</td>
                         <td className="text-center p-4 font-bold">{team.total_kills}</td>
                         <td className="text-center p-4 font-bold">{team.total_standing_points}</td>
                         <td className="text-center p-4 text-xl font-black text-primary">{team.total_points}</td>

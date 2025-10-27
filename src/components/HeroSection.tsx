@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Trophy, Calendar, Users, Zap, UserPlus } from "lucide-react";
 import { motion } from "framer-motion";
+import { BackgroundPaths } from "./BackgroundPaths";
 
 const HeroSection = () => {
   const [timeLeft, setTimeLeft] = useState({
@@ -12,9 +13,9 @@ const HeroSection = () => {
     seconds: 0,
   });
 
-  // Countdown to BR tournament (Nov 8, 2025)
+  // Countdown to BR tournament (Nov 7, 2025, 7 PM)
   useEffect(() => {
-    const eventDate = new Date("2025-11-08T10:00:00");
+    const eventDate = new Date("2025-11-07T19:00:00");
 
     const timer = setInterval(() => {
       const now = new Date().getTime();
@@ -57,8 +58,7 @@ const HeroSection = () => {
     <section className="relative min-h-screen flex items-center justify-center pt-20 pb-16 overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }} />
+        <BackgroundPaths />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
@@ -69,9 +69,9 @@ const HeroSection = () => {
           className="text-center max-w-5xl mx-auto"
         >
           {/* Badge */}
-          <motion.div variants={itemVariants} className="inline-flex items-center gap-2 glass px-6 py-3 rounded-full mb-8 glow-primary">
+          <motion.div variants={itemVariants} className="inline-flex items-center gap-2 glass px-6 py-3 rounded-full mb-8 border border-primary/20">
             <Zap className="w-5 h-5 text-primary animate-pulse" />
-            <span className="text-sm font-bold uppercase tracking-wider">BPUT Gaming Tournament 2025</span>
+            <span className="text-sm font-bold uppercase tracking-wider">Join with your own squad to win the lobby</span>
           </motion.div>
 
           {/* Main Title */}
@@ -82,8 +82,13 @@ const HeroSection = () => {
           </motion.h1>
 
           {/* Subtitle */}
-          <motion.p variants={itemVariants} className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto">
+          <motion.p variants={itemVariants} className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto">
             A free friendly tournament organized by BPUT FF Committee
+          </motion.p>
+
+          {/* Venue and Time */}
+          <motion.p variants={itemVariants} className="text-lg text-muted-foreground/80 mb-12 max-w-2xl mx-auto">
+            📍 7 PM, 7th Nov. 2025 @ HHR, BPUT, Rourkela
           </motion.p>
 
           {/* CTA Buttons */}
@@ -113,9 +118,9 @@ const HeroSection = () => {
                 { label: "Hours", value: timeLeft.hours },
                 { label: "Minutes", value: timeLeft.minutes },
                 { label: "Seconds", value: timeLeft.seconds },
-              ].map((item, index) => (
-                <div key={item.label} className="glass rounded-xl p-4 md:p-6 card-3d hover-glow-primary">
-                  <div className="text-4xl md:text-6xl font-black gradient-text mb-2">
+              ].map((item) => (
+                <div key={item.label} className="glass rounded-xl p-4 md:p-6 border border-primary/10">
+                  <div className="text-4xl md:text-6xl font-black text-primary mb-2">
                     {item.value.toString().padStart(2, "0")}
                   </div>
                   <div className="text-xs md:text-sm uppercase tracking-wider text-muted-foreground font-semibold">

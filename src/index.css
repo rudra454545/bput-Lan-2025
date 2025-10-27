@@ -8,11 +8,11 @@
 
 @layer base {
   :root {
-    /* Dark Greenish Base Colors */
-    --background: 160 40% 6%;
-    --background-secondary: 160 30% 10%;
-    --background-tertiary: 160 25% 16%;
-    --foreground: 0 0% 100%;
+    /* Dark Black, White & Grey Theme */
+    --background: 0 0% 4%;
+    --background-secondary: 0 0% 8%;
+    --background-tertiary: 0 0% 12%;
+    --foreground: 0 0% 98%;
     
     /* Neon Accent Colors */
     --neon-green: 152 100% 50%;
@@ -20,61 +20,61 @@
     --neon-lime: 82 100% 50%;
     
     /* Card & Surface Colors */
-    --card: 160 25% 16%;
-    --card-foreground: 0 0% 100%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 98%;
     
-    --popover: 160 30% 10%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 98%;
     
-    /* Primary - Bright Green */
-    --primary: 152 100% 50%;
-    --primary-foreground: 160 40% 6%;
+    /* Primary - White */
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 4%;
     
-    /* Secondary - Cyan */
-    --secondary: 190 100% 50%;
-    --secondary-foreground: 160 40% 6%;
+    /* Secondary - Grey */
+    --secondary: 0 0% 35%;
+    --secondary-foreground: 0 0% 98%;
     
     /* Muted Colors */
-    --muted: 160 20% 25%;
-    --muted-foreground: 160 15% 65%;
+    --muted: 0 0% 18%;
+    --muted-foreground: 0 0% 60%;
     
-    /* Accent - Lime */
-    --accent: 82 100% 50%;
-    --accent-foreground: 160 40% 6%;
+    /* Accent - Light Grey */
+    --accent: 0 0% 45%;
+    --accent-foreground: 0 0% 98%;
     
     /* Semantic Colors */
     --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive-foreground: 0 0% 98%;
     
     --success: 152 100% 50%;
-    --success-foreground: 160 40% 6%;
+    --success-foreground: 0 0% 4%;
     
     --warning: 45 100% 50%;
-    --warning-foreground: 160 40% 6%;
+    --warning-foreground: 0 0% 4%;
     
     --info: 190 100% 50%;
-    --info-foreground: 160 40% 6%;
+    --info-foreground: 0 0% 4%;
     
     /* Border & Input */
-    --border: 160 20% 25%;
-    --input: 160 20% 25%;
-    --ring: 152 100% 50%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 0% 98%;
     
     /* Glass Effect Variables */
-    --glass-bg: 160 25% 16%;
-    --glass-border: 0 0% 100%;
+    --glass-bg: 0 0% 10%;
+    --glass-border: 0 0% 98%;
     --glass-shadow: 0 0% 0%;
     
     /* Shadows & Glows */
-    --shadow-primary: 152 100% 50%;
-    --shadow-secondary: 190 100% 50%;
-    --shadow-accent: 82 100% 50%;
+    --shadow-primary: 0 0% 98%;
+    --shadow-secondary: 0 0% 70%;
+    --shadow-accent: 0 0% 50%;
     
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(152 100% 50%) 0%, hsl(190 100% 50%) 100%);
-    --gradient-secondary: linear-gradient(135deg, hsl(190 100% 50%) 0%, hsl(82 100% 50%) 100%);
-    --gradient-radial: radial-gradient(circle at 20% 50%, hsla(152 100% 50% / 0.05) 0%, transparent 50%), 
-                       radial-gradient(circle at 80% 80%, hsla(190 100% 50% / 0.05) 0%, transparent 50%);
+    --gradient-primary: linear-gradient(135deg, hsl(0 0% 98%) 0%, hsl(0 0% 70%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(0 0% 60%) 0%, hsl(0 0% 30%) 100%);
+    --gradient-radial: radial-gradient(circle at 20% 50%, hsla(0 0% 98% / 0.03) 0%, transparent 50%), 
+                       radial-gradient(circle at 80% 80%, hsla(0 0% 70% / 0.03) 0%, transparent 50%);
     
     --radius: 16px;
     
@@ -92,7 +92,7 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Rajdhani', sans-serif;
-    background: linear-gradient(135deg, hsl(160 40% 6%) 0%, hsl(160 30% 10%) 50%, hsl(160 25% 16%) 100%);
+    background: radial-gradient(ellipse at top, hsl(0 0% 8%) 0%, hsl(0 0% 4%) 100%);
     background-attachment: fixed;
     position: relative;
   }
@@ -105,9 +105,8 @@
     width: 100%;
     height: 100%;
     background: 
-      radial-gradient(circle at 20% 50%, hsla(152 100% 50% / 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, hsla(190 100% 50% / 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 50% 20%, hsla(82 100% 50% / 0.03) 0%, transparent 40%);
+      radial-gradient(circle at 20% 50%, hsla(0 0% 98% / 0.02) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, hsla(0 0% 70% / 0.02) 0%, transparent 50%);
     pointer-events: none;
     z-index: 0;
   }

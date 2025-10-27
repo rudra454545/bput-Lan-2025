@@ -40,6 +40,7 @@ export type Database = {
       }
       match_scores_br: {
         Row: {
+          booyah: number | null
           match_id: string
           match_kills: number | null
           match_number: number
@@ -51,6 +52,7 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
+          booyah?: number | null
           match_id?: string
           match_kills?: number | null
           match_number: number
@@ -62,6 +64,7 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
+          booyah?: number | null
           match_id?: string
           match_kills?: number | null
           match_number?: number
@@ -383,6 +386,27 @@ export type Database = {
           },
         ]
       }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["user_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["user_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["user_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -390,11 +414,13 @@ export type Database = {
     Functions: {
       generate_unique_player_id: { Args: never; Returns: string }
       generate_unique_team_id: { Args: never; Returns: string }
+      is_admin: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "rusher" | "flanker" | "bomber" | "supporter"
       match_mode: "BR" | "CS"
       match_status: "scheduled" | "ongoing" | "completed"
+      user_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -525,6 +551,7 @@ export const Constants = {
       app_role: ["rusher", "flanker", "bomber", "supporter"],
       match_mode: ["BR", "CS"],
       match_status: ["scheduled", "ongoing", "completed"],
+      user_role: ["admin", "user"],
     },
   },
 } as const
