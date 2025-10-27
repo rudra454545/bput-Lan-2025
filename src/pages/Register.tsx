@@ -44,8 +44,8 @@ const Register = () => {
     }
 
     toast({
-      title: "Coming Soon!",
-      description: "Team registration functionality will be available soon.",
+      title: "Registration Submitted!",
+      description: "Your team registration has been submitted successfully. You will be notified once verified by admin.",
     });
   };
 
