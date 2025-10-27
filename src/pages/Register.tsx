@@ -187,7 +187,6 @@ const Register = () => {
       const { data: teamData, error: teamError } = await supabase
         .from("teams")
         .insert({
-          team_id: teamIdData,
           team_name: teamName.trim(),
           igl_user_id: iglProfile.id,
           team_logo_url: publicUrl,
