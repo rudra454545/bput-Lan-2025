@@ -76,6 +76,7 @@ const AdminPanel = () => {
       .eq("team_id", team.team_id);
 
     if (error) {
+      console.error("Error approving team:", error);
       toast({
         title: "Error",
         description: "Failed to approve team",
@@ -89,9 +90,8 @@ const AdminPanel = () => {
       description: "Team has been verified successfully",
     });
 
-    // Update state locally to move the team immediately
-    setPendingTeams(prev => prev.filter(t => t.team_id !== team.team_id));
-    setVerifiedTeams(prev => [...prev, { ...team, is_verified: true }]);
+    // Refresh data from database to ensure UI is in sync
+    fetchTeams();
   };
 
   const handleRejectTeam = async (team: any) => {
@@ -101,6 +101,7 @@ const AdminPanel = () => {
       .eq("team_id", team.team_id);
 
     if (error) {
+      console.error("Error rejecting team:", error);
       toast({
         title: "Error",
         description: "Failed to reject team",
@@ -114,8 +115,8 @@ const AdminPanel = () => {
       description: "Team registration has been rejected",
     });
 
-    // Update state locally to remove the team immediately
-    setPendingTeams(prev => prev.filter(t => t.team_id !== team.team_id));
+    // Refresh data from database to ensure UI is in sync
+    fetchTeams();
   };
 
   if (loading) {
