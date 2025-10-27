@@ -149,13 +149,7 @@ const Profile = () => {
                   </div>
                 </div>
 
-                {!profile?.is_verified && (
-                  <div className="mt-4 glass-sm px-4 py-2 rounded-lg inline-block">
-                    <p className="text-sm text-yellow-500 font-semibold">
-                      ⚠️ Account pending admin verification
-                    </p>
-                  </div>
-                )}
+
               </div>
             </div>
           </div>

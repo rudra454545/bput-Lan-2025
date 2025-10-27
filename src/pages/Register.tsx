@@ -26,14 +26,14 @@ const Register = () => {
   const [showFifthPlayer, setShowFifthPlayer] = useState(false);
 
   // Registration deadline check
-  const registrationDeadline = new Date("2025-11-05T17:00:00");
+  const registrationDeadline = new Date("2024-11-05T17:00:00");
   const isRegistrationOpen = new Date() < registrationDeadline;
 
-  const roleOptions = ["rusher", "flanker", "bomber", "supporter"];
+  const roleOptions = ["rusher", "flanker", "sniper", "supporter"];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!isRegistrationOpen) {
       toast({
         title: "Registration Closed",

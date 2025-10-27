@@ -2,7 +2,7 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Create enum types
-CREATE TYPE app_role AS ENUM ('rusher', 'flanker', 'bomber', 'supporter');
+CREATE TYPE app_role AS ENUM ('rusher', 'flanker', 'sniper', 'supporter');
 CREATE TYPE match_mode AS ENUM ('BR', 'CS');
 CREATE TYPE match_status AS ENUM ('scheduled', 'ongoing', 'completed');
 
