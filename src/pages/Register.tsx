@@ -6,8 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { Trophy, Plus, X } from "lucide-react";
+import { Trophy, Plus, X, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
+import { BackgroundPaths } from "@/components/BackgroundPaths";
 
 const Register = () => {
   const { toast } = useToast();
@@ -50,6 +51,10 @@ const Register = () => {
 
   return (
     <div className="min-h-screen relative">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <BackgroundPaths />
+      </div>
       <Navigation />
       <main className="pt-24 pb-16 container mx-auto px-4 max-w-4xl">
         <motion.div
@@ -225,6 +230,24 @@ const Register = () => {
             <p className="text-sm text-muted-foreground text-center">
               Your team will be verified by admin before participating in the tournament.
             </p>
+
+            {/* WhatsApp Group Link */}
+            <div className="flex justify-center pt-4">
+              <a
+                href="https://chat.whatsapp.com/E1e94eyrfCGAVzcq250vCn?mode=wwt"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="glass rounded-xl p-4 hover-glow-primary transition-all flex items-center gap-3 group"
+              >
+                <div className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center group-hover:bg-green-400 transition-colors">
+                  <MessageCircle className="w-6 h-6 text-white" />
+                </div>
+                <div className="text-left">
+                  <div className="font-semibold text-foreground">Join WhatsApp Group</div>
+                  <div className="text-sm text-muted-foreground">For further notifications</div>
+                </div>
+              </a>
+            </div>
           </form>
         )}
       </main>

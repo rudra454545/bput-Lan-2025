@@ -21,12 +21,21 @@ const HeroSection = () => {
       const now = new Date().getTime();
       const distance = eventDate.getTime() - now;
 
-      setTimeLeft({
-        days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-        minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-        seconds: Math.floor((distance % (1000 * 60)) / 1000),
-      });
+      if (distance > 0) {
+        setTimeLeft({
+          days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+          seconds: Math.floor((distance % (1000 * 60)) / 1000),
+        });
+      } else {
+        setTimeLeft({
+          days: 0,
+          hours: 0,
+          minutes: 0,
+          seconds: 0,
+        });
+      }
     }, 1000);
 
     return () => clearInterval(timer);
@@ -59,6 +68,14 @@ const HeroSection = () => {
       {/* Animated Background Elements */}
       <div className="absolute inset-0 pointer-events-none">
         <BackgroundPaths />
+        {/* Favicon Background */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
+          <img
+            src="/favicon.ico"
+            alt=""
+            className="w-96 h-96 object-contain opacity-30"
+          />
+        </div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
@@ -107,28 +124,46 @@ const HeroSection = () => {
             </Link>
           </motion.div>
 
-          {/* Countdown Timer */}
+          {/* Countdown Timer or Live Message */}
           <motion.div variants={itemVariants} className="glass-lg rounded-2xl p-8 max-w-4xl mx-auto">
-            <h3 className="text-sm uppercase tracking-wider text-muted-foreground mb-6 font-bold">
-              Event Starts In
-            </h3>
-            <div className="grid grid-cols-4 gap-4 md:gap-8">
-              {[
-                { label: "Days", value: timeLeft.days },
-                { label: "Hours", value: timeLeft.hours },
-                { label: "Minutes", value: timeLeft.minutes },
-                { label: "Seconds", value: timeLeft.seconds },
-              ].map((item) => (
-                <div key={item.label} className="glass rounded-xl p-4 md:p-6 border border-primary/10">
-                  <div className="text-4xl md:text-6xl font-black text-primary mb-2">
-                    {item.value.toString().padStart(2, "0")}
-                  </div>
-                  <div className="text-xs md:text-sm uppercase tracking-wider text-muted-foreground font-semibold">
-                    {item.label}
-                  </div>
+            {timeLeft.days === 0 && timeLeft.hours === 0 && timeLeft.minutes === 0 && timeLeft.seconds === 0 ? (
+              <div className="text-center">
+                <motion.h3
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  className="text-4xl md:text-6xl font-black gradient-text mb-4 animate-pulse"
+                >
+                  THE WAR IS LIVE
+                </motion.h3>
+                <p className="text-lg text-muted-foreground">
+                  The tournament has begun! Good luck to all participants!
+                </p>
+              </div>
+            ) : (
+              <>
+                <h3 className="text-sm uppercase tracking-wider text-muted-foreground mb-6 font-bold">
+                  Event Starts In
+                </h3>
+                <div className="grid grid-cols-4 gap-4 md:gap-8">
+                  {[
+                    { label: "Days", value: timeLeft.days },
+                    { label: "Hours", value: timeLeft.hours },
+                    { label: "Minutes", value: timeLeft.minutes },
+                    { label: "Seconds", value: timeLeft.seconds },
+                  ].map((item) => (
+                    <div key={item.label} className="glass rounded-xl p-4 md:p-6 border border-primary/10">
+                      <div className="text-4xl md:text-6xl font-black text-primary mb-2">
+                        {item.value.toString().padStart(2, "0")}
+                      </div>
+                      <div className="text-xs md:text-sm uppercase tracking-wider text-muted-foreground font-semibold">
+                        {item.label}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </>
+            )}
           </motion.div>
         </motion.div>
       </div>

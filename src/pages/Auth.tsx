@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion } from "framer-motion";
 import { Mail, Lock, User, Phone, IdCard, Gamepad2, Upload, Trophy } from "lucide-react";
 import { z } from "zod";
+import { BackgroundPaths } from "@/components/BackgroundPaths";
 
 const signupSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -208,6 +209,10 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12 relative">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <BackgroundPaths />
+      </div>
       {/* Animated Background */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-float" />

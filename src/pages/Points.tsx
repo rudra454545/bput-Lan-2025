@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { motion } from "framer-motion";
+import { BackgroundPaths } from "@/components/BackgroundPaths";
 
 const Points = () => {
   const [brTeams, setBrTeams] = useState<any[]>([]);
@@ -102,6 +103,10 @@ const Points = () => {
 
   return (
     <div className="min-h-screen relative">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <BackgroundPaths />
+      </div>
       <Navigation />
       <main className="pt-24 pb-16 container mx-auto px-4">
         <motion.div

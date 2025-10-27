@@ -2,16 +2,33 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Calendar, Clock, Trophy, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
+import { BackgroundPaths } from "@/components/BackgroundPaths";
 
 const Schedule = () => {
   // Dummy schedule data for 18 BR matches
-  const brMatches = Array.from({ length: 18 }, (_, i) => ({
-    matchNumber: i + 1,
-    date: i < 9 ? "November 8, 2025" : "November 9, 2025",
-    time: i < 9 ? `${10 + Math.floor(i / 3)}:${(i % 3) * 20} AM` : `${10 + Math.floor((i - 9) / 3)}:${((i - 9) % 3) * 20} AM`,
-    status: "scheduled" as const,
-    map: ["Bermuda", "Purgatory", "Kalahari"][i % 3],
-  }));
+  const maps = ["Bermuda", "Purgatory", "Alpine", "Nexterra", "Kalahari", "Solara"];
+  const times = ["7:00 PM", "7:25 PM", "7:50 PM", "8:15 PM", "10:00 PM", "10:25 PM"];
+
+  const brMatches = Array.from({ length: 18 }, (_, i) => {
+    const matchIndex = i + 1;
+    const mapIndex = i % 6; // Cycle through 6 maps
+    const timeIndex = i % 6; // Cycle through 6 times
+
+    let date = "November 7, 2025";
+    if (i >= 6 && i < 12) {
+      date = "November 8, 2025";
+    } else if (i >= 12) {
+      date = "November 9, 2025";
+    }
+
+    return {
+      matchNumber: matchIndex,
+      date: date,
+      time: times[timeIndex],
+      status: "scheduled" as const,
+      map: maps[mapIndex],
+    };
+  });
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -36,6 +53,10 @@ const Schedule = () => {
 
   return (
     <div className="min-h-screen relative">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <BackgroundPaths />
+      </div>
       <Navigation />
       <main className="pt-24 pb-16 container mx-auto px-4">
         <motion.div

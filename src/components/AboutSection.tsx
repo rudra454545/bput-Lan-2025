@@ -1,4 +1,4 @@
-import { Trophy, Users, Gift, Zap } from "lucide-react";
+import { Trophy, Users, Gift, Zap, Heart } from "lucide-react";
 import { motion } from "framer-motion";
 
 const AboutSection = () => {
@@ -14,9 +14,9 @@ const AboutSection = () => {
       description: "Form your squad of 4 players and compete against other teams. Strategy, teamwork, and skill will determine the victor.",
     },
     {
-      icon: Gift,
-      title: "Amazing Prizes",
-      description: "Win exciting prizes including cash rewards, gaming gear, and exclusive Free Fire merchandise for top performers.",
+      icon: Heart,
+      title: "Friendly Tournament",
+      description: "Create Your Own Team To Win The Lobby, And Get A Reputed Position In Our Committee.",
     },
     {
       icon: Zap,
@@ -108,9 +108,9 @@ const AboutSection = () => {
         >
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              { value: "100+", label: "Participants" },
-              { value: "25+", label: "Teams" },
-              { value: "₹50K", label: "Prize Pool" },
+              { value: "50+", label: "Participants" },
+              { value: "10+", label: "Teams" },
+              { value: "Friendly", label: "Tournaent" },
               { value: "3", label: "Days Event" },
             ].map((stat, index) => (
               <div key={stat.label} className="text-center">

@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { Trophy, User, Mail, Phone, IdCard, Gamepad2, Users, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
+import { BackgroundPaths } from "@/components/BackgroundPaths";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -97,6 +98,10 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen relative">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <BackgroundPaths />
+      </div>
       <Navigation />
       <main className="pt-24 pb-16 container mx-auto px-4 max-w-6xl">
         <motion.div
