@@ -125,6 +125,52 @@ const Navigation = () => {
                   </Button>
                 </Link>
               ))}
+
+              {/* Mobile Auth Section */}
+              <div className="border-t border-primary/20 pt-2 mt-2">
+                {user ? (
+                  <>
+                    <Link to="/profile" onClick={() => setIsOpen(false)}>
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start gap-2 hover:text-primary transition-colors"
+                      >
+                        <User className="w-4 h-4" />
+                        Profile
+                      </Button>
+                    </Link>
+                    {isAdmin && (
+                      <Link to="/admin" onClick={() => setIsOpen(false)}>
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-start gap-2 hover:text-primary transition-colors"
+                        >
+                          <Shield className="w-4 h-4" />
+                          Admin
+                        </Button>
+                      </Link>
+                    )}
+                    <Button
+                      variant="ghost"
+                      onClick={() => {
+                        handleLogout();
+                        setIsOpen(false);
+                      }}
+                      className="w-full justify-start gap-2 hover:text-destructive transition-colors"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Logout
+                    </Button>
+                  </>
+                ) : (
+                  <Link to="/auth" onClick={() => setIsOpen(false)}>
+                    <Button variant="hero" className="w-full justify-start gap-2">
+                      <User className="w-4 h-4" />
+                      Login / Signup
+                    </Button>
+                  </Link>
+                )}
+              </div>
             </div>
           </div>
         )}
