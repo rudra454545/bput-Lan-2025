@@ -89,6 +89,7 @@ const AdminPanel = () => {
       description: "Team has been verified successfully",
     });
 
+    // Refresh the teams data to move the approved team to verified section
     fetchTeams();
   };
 

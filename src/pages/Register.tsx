@@ -117,6 +117,57 @@ const Register = () => {
         return;
       }
 
+      // Check if any player is already registered in a team
+      const playerIds = validPlayers.map(p => p.playerId);
+      const { data: profiles, error: profilesError } = await supabase
+        .from("profiles")
+        .select("id, unique_player_id")
+        .in("unique_player_id", playerIds);
+
+      if (profilesError || !profiles) {
+        console.error("Profiles fetch error:", profilesError);
+        toast({
+          title: "Error",
+          description: "Failed to fetch player profiles",
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
+      // Map unique_player_id to profile id
+      const profileMap = new Map(profiles.map(p => [p.unique_player_id, p.id]));
+
+      // Check if all players have valid profiles
+      const missingProfiles = validPlayers.filter(p => !profileMap.has(p.playerId));
+      if (missingProfiles.length > 0) {
+        toast({
+          title: "Error",
+          description: `Player(s) not found: ${missingProfiles.map(p => p.playerId).join(', ')}. Please ensure all players have valid profiles.`,
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
+      // Check if any player is already in a team
+      const userIds = validPlayers.map(p => profileMap.get(p.playerId)!);
+      const { data: existingMembers } = await supabase
+        .from("team_members")
+        .select("user_id, profiles(unique_player_id)")
+        .in("user_id", userIds);
+
+      if (existingMembers && existingMembers.length > 0) {
+        const registeredPlayers = existingMembers.map(m => m.profiles?.unique_player_id).join(', ');
+        toast({
+          title: "Already Registered",
+          description: `Player(s) ${registeredPlayers} are already registered in a team. Please use different players.`,
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
       // Find IGL player
       const iglPlayer = players.find(p => p.isIGL);
       if (!iglPlayer) {
@@ -219,39 +270,6 @@ const Register = () => {
       }
 
       // Add team members
-      // First, get profile IDs for all players
-      const playerIds = validPlayers.map(p => p.playerId);
-      const { data: profiles, error: profilesError } = await supabase
-        .from("profiles")
-        .select("id, unique_player_id")
-        .in("unique_player_id", playerIds);
-
-      if (profilesError || !profiles) {
-        console.error("Profiles fetch error:", profilesError);
-        toast({
-          title: "Error",
-          description: "Failed to fetch player profiles",
-          variant: "destructive",
-        });
-        setLoading(false);
-        return;
-      }
-
-      // Map unique_player_id to profile id
-      const profileMap = new Map(profiles.map(p => [p.unique_player_id, p.id]));
-
-      // Check if all players have valid profiles
-      const missingProfiles = validPlayers.filter(p => !profileMap.has(p.playerId));
-      if (missingProfiles.length > 0) {
-        toast({
-          title: "Error",
-          description: `Player(s) not found: ${missingProfiles.map(p => p.playerId).join(', ')}. Please ensure all players have valid profiles.`,
-          variant: "destructive",
-        });
-        setLoading(false);
-        return;
-      }
-
       const teamMembers = validPlayers.map(player => ({
         team_id: teamData.team_id,
         user_id: profileMap.get(player.playerId)!,
