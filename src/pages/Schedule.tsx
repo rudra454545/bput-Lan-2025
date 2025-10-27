@@ -7,7 +7,7 @@ import { BackgroundPaths } from "@/components/BackgroundPaths";
 const Schedule = () => {
   // Dummy schedule data for 18 BR matches
   const maps = ["Bermuda", "Purgatory", "Alpine", "Nexterra", "Kalahari", "Solara"];
-  const times = ["7:00 PM", "7:25 PM", "7:50 PM", "8:15 PM", "10:00 PM", "10:25 PM"];
+  const times = ["7:30 PM", "7:55 PM", "8:20 PM", "10:00 PM", "10:25 PM", "10:50 PM"];
 
   const brMatches = Array.from({ length: 18 }, (_, i) => {
     const matchIndex = i + 1;
