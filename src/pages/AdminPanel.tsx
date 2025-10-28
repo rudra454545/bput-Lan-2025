@@ -49,7 +49,7 @@ const AdminPanel = () => {
           profiles:user_id (full_name, unique_player_id)
         )
       `)
-      .eq("is_verified", false);
+      .neq("is_verified", true);
 
     // Fetch verified teams
     const { data: verifiedData } = await supabase
@@ -70,16 +70,23 @@ const AdminPanel = () => {
   };
 
   const handleApproveTeam = async (team: any) => {
+    console.log("Approving team:", team.team_id);
+
+    const { data: { session } } = await supabase.auth.getSession();
+    console.log("Current session:", session?.user?.email);
+
     const { error } = await supabase
       .from("teams")
       .update({ is_verified: true })
       .eq("team_id", team.team_id);
 
+    console.log("Update result:", { error });
+
     if (error) {
       console.error("Error approving team:", error);
       toast({
         title: "Error",
-        description: "Failed to approve team",
+        description: `Failed to approve team: ${error.message}`,
         variant: "destructive",
       });
       return;
@@ -95,16 +102,20 @@ const AdminPanel = () => {
   };
 
   const handleRejectTeam = async (team: any) => {
+    console.log("Rejecting team:", team.team_id);
+
     const { error } = await supabase
       .from("teams")
       .delete()
       .eq("team_id", team.team_id);
 
+    console.log("Delete result:", { error });
+
     if (error) {
       console.error("Error rejecting team:", error);
       toast({
         title: "Error",
-        description: "Failed to reject team",
+        description: `Failed to reject team: ${error.message}`,
         variant: "destructive",
       });
       return;
